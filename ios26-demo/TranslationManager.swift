@@ -310,6 +310,23 @@ extension String {
     }
 }
 
+// MARK: - Reactive Translation View
+struct ReactiveText: View {
+    let key: String
+    @StateObject private var translationManager = TranslationManager.shared
+    
+    init(_ key: String) {
+        self.key = key
+    }
+    
+    var body: some View {
+        Text(translationManager.translate(key))
+            .onReceive(translationManager.$currentLanguage) { _ in
+                // This ensures the view updates when language changes
+            }
+    }
+}
+
 // MARK: - SwiftUI Translation View
 struct T: View {
     let key: String
@@ -366,11 +383,11 @@ struct LanguagePickerView: View {
                     .buttonStyle(PlainButtonStyle())
                 }
             }
-            .navigationTitle("select_language".t)
+            .navigationTitle(translationManager.translate("select_language"))
             .navigationBarTitleDisplayMode(.inline)
             .toolbar {
                 ToolbarItem(placement: .navigationBarTrailing) {
-                    Button("done".t) {
+                    Button(translationManager.translate("done")) {
                         dismiss()
                     }
                 }

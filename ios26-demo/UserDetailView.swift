@@ -9,6 +9,7 @@ import SwiftUI
 
 struct UserDetailView: View {
     let user: User
+    @StateObject private var translationManager = TranslationManager.shared
     
     var body: some View {
         ScrollView {
@@ -39,8 +40,8 @@ struct UserDetailView: View {
                 
                 // User Information Cards
                 VStack(spacing: 16) {
-                    InfoCard(title: "phone_number".localized, value: user.phone, icon: "phone.fill")
-                    InfoCard(title: "location_info".localized, value: user.cityNeighborhood, icon: "location.fill")
+                    InfoCard(title: translationManager.translate("phone_number"), value: user.phone, icon: "phone.fill")
+                    InfoCard(title: translationManager.translate("location_info"), value: user.cityNeighborhood, icon: "location.fill")
                     
                     // Sports Section
                     VStack(alignment: .leading, spacing: 12) {
@@ -48,14 +49,14 @@ struct UserDetailView: View {
                             Image(systemName: "sportscourt.fill")
                                 .foregroundColor(.blue)
                                 .font(.title2)
-                            Text("sports_interests".localized)
+                            Text(translationManager.translate("sports_interests"))
                                 .font(.headline)
                                 .fontWeight(.semibold)
                         }
                         
                         LazyVGrid(columns: Array(repeating: GridItem(.flexible()), count: 3), spacing: 8) {
                             ForEach(user.sports, id: \.self) { sport in
-                                Text(SportsLocalizer.localizedSportName(sport))
+                                Text(translationManager.translate(sport.lowercased()))
                                     .font(.caption)
                                     .fontWeight(.medium)
                                     .padding(.horizontal, 12)
@@ -83,7 +84,7 @@ struct UserDetailView: View {
                 Spacer()
             }
         }
-        .navigationTitle("registration".localized)
+        .navigationTitle(translationManager.translate("registration"))
         .navigationBarTitleDisplayMode(.inline)
     }
 }

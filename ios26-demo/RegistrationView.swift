@@ -22,6 +22,8 @@ struct RegistrationView: View {
     @State private var showingAlert = false
     @State private var alertMessage = ""
     
+    @StateObject private var translationManager = TranslationManager.shared
+    
     let availableSports = [
         SportItem(name: "Soccer", icon: "⚽"),
         SportItem(name: "Basketball", icon: "🏀"),
@@ -51,12 +53,12 @@ struct RegistrationView: View {
                 VStack(spacing: 24) {
                     // Header
                     VStack(spacing: 8) {
-                        Text("registration".localized)
+                        Text(translationManager.translate("registration"))
                             .font(.largeTitle)
                             .fontWeight(.bold)
                             .foregroundColor(.primary)
                         
-                        Text("welcome_message".localized)
+                        Text(translationManager.translate("welcome_message"))
                             .font(.subheadline)
                             .foregroundColor(.secondary)
                     }
@@ -66,12 +68,12 @@ struct RegistrationView: View {
                     VStack(spacing: 20) {
                         // Personal Information Section
                         VStack(alignment: .leading, spacing: 16) {
-                            Text("contact_info".localized)
+                            Text(translationManager.translate("contact_info"))
                                 .font(.headline)
                                 .fontWeight(.semibold)
                             
                             CustomTextField(
-                                title: "phone_number".localized,
+                                title: translationManager.translate("phone_number"),
                                 text: $phone,
                                 placeholder: "+381 (60) 123-4567",
                                 keyboardType: .phonePad
@@ -79,20 +81,20 @@ struct RegistrationView: View {
                             
                             HStack(spacing: 12) {
                                 CustomTextField(
-                                    title: "first_name".localized,
+                                    title: translationManager.translate("first_name"),
                                     text: $firstName,
                                     placeholder: "Marko"
                                 )
                                 
                                 CustomTextField(
-                                    title: "last_name".localized,
+                                    title: translationManager.translate("last_name"),
                                     text: $lastName,
                                     placeholder: "Stanković"
                                 )
                             }
                             
                             CustomTextField(
-                                title: "nickname".localized,
+                                title: translationManager.translate("nickname"),
                                 text: $nickname,
                                 placeholder: "MarkoS"
                             )
@@ -103,11 +105,11 @@ struct RegistrationView: View {
                         // Sports Selection Section
                         VStack(alignment: .leading, spacing: 16) {
                             VStack(alignment: .leading, spacing: 4) {
-                                Text("sports_you_play".localized)
+                                Text(translationManager.translate("sports_you_play"))
                                     .font(.headline)
                                     .fontWeight(.semibold)
                                 
-                                Text("select_sports_hint".localized)
+                                Text(translationManager.translate("select_sports_hint"))
                                     .font(.caption)
                                     .foregroundColor(.secondary)
                             }
@@ -132,12 +134,12 @@ struct RegistrationView: View {
                         
                         // Location Section
                         VStack(alignment: .leading, spacing: 16) {
-                            Text("location_info".localized)
+                            Text(translationManager.translate("location_info"))
                                 .font(.headline)
                                 .fontWeight(.semibold)
                             
                             CustomTextField(
-                                title: "city_neighborhood".localized,
+                                title: translationManager.translate("city_neighborhood"),
                                 text: $cityNeighborhood,
                                 placeholder: "Beograd - Novi Beograd"
                             )
@@ -145,7 +147,7 @@ struct RegistrationView: View {
                         
                         // Register Button
                         Button(action: registerUser) {
-                            Text("register_button".localized)
+                            Text(translationManager.translate("register_button"))
                                 .font(.headline)
                                 .fontWeight(.semibold)
                                 .foregroundColor(.white)
@@ -170,14 +172,14 @@ struct RegistrationView: View {
             .navigationBarTitleDisplayMode(.inline)
             .toolbar {
                 ToolbarItem(placement: .navigationBarLeading) {
-                    Button("cancel".localized) {
+                    Button(translationManager.translate("cancel")) {
                         dismiss()
                     }
                 }
             }
         }
-        .alert("registration".localized, isPresented: $showingAlert) {
-            Button("done".localized) { }
+        .alert(translationManager.translate("registration"), isPresented: $showingAlert) {
+            Button(translationManager.translate("done")) { }
         } message: {
             Text(alertMessage)
         }
@@ -186,32 +188,32 @@ struct RegistrationView: View {
     private func registerUser() {
         // Validation
         guard !phone.isEmpty else {
-            showAlert(message: "please_fill_required_fields".localized)
+            showAlert(message: translationManager.translate("please_fill_required_fields"))
             return
         }
         
         guard !firstName.isEmpty else {
-            showAlert(message: "please_fill_required_fields".localized)
+            showAlert(message: translationManager.translate("please_fill_required_fields"))
             return
         }
         
         guard !lastName.isEmpty else {
-            showAlert(message: "please_fill_required_fields".localized)
+            showAlert(message: translationManager.translate("please_fill_required_fields"))
             return
         }
         
         guard !nickname.isEmpty else {
-            showAlert(message: "please_fill_required_fields".localized)
+            showAlert(message: translationManager.translate("please_fill_required_fields"))
             return
         }
         
         guard !selectedSports.isEmpty else {
-            showAlert(message: "select_at_least_one_sport".localized)
+            showAlert(message: translationManager.translate("select_at_least_one_sport"))
             return
         }
         
         guard !cityNeighborhood.isEmpty else {
-            showAlert(message: "please_fill_required_fields".localized)
+            showAlert(message: translationManager.translate("please_fill_required_fields"))
             return
         }
         
@@ -227,7 +229,7 @@ struct RegistrationView: View {
         
         modelContext.insert(newUser)
         
-        showAlert(message: "registration_successful".localized)
+        showAlert(message: translationManager.translate("registration_successful"))
         
         // Reset form
         DispatchQueue.main.asyncAfter(deadline: .now() + 1.5) {
@@ -280,6 +282,7 @@ struct SportSelectionCard: View {
     let sport: SportItem
     let isSelected: Bool
     let action: () -> Void
+    @StateObject private var translationManager = TranslationManager.shared
     
     var body: some View {
         Button(action: action) {
@@ -287,7 +290,7 @@ struct SportSelectionCard: View {
                 Text(sport.icon)
                     .font(.title2)
                 
-                Text(SportsLocalizer.localizedSportName(sport.name))
+                Text(translationManager.translate(sport.name.lowercased()))
                     .font(.caption)
                     .fontWeight(.medium)
                     .multilineTextAlignment(.center)

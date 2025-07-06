@@ -12,17 +12,18 @@ struct ContentView: View {
     @Environment(\.modelContext) private var modelContext
     @Query private var items: [Item]
     @Query private var users: [User]
+    @StateObject private var translationManager = TranslationManager.shared
 
     var body: some View {
         TabView {
             SportsMapView()
                 .tabItem {
-                    Label("map".localized, systemImage: "map.fill")
+                    Label(translationManager.translate("map"), systemImage: "map.fill")
                 }
             
             CommunityView(users: users, items: items, modelContext: modelContext)
                 .tabItem {
-                    Label("community".localized, systemImage: "person.3.fill")
+                    Label(translationManager.translate("community"), systemImage: "person.3.fill")
                 }
         }
     }

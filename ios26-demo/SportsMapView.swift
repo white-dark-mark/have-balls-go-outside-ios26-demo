@@ -91,7 +91,7 @@ struct SportsMapView: View {
                     }
                 }
             }
-            .navigationTitle("sports_venues".t)
+            .navigationTitle(translationManager.translate("sports_venues"))
             .navigationBarTitleDisplayMode(.inline)
             .sheet(isPresented: $showingVenueDetail) {
                 if let venue = selectedVenue {
@@ -142,6 +142,7 @@ struct VenueMapMarker: View {
 struct VenueDetailView: View {
     let venue: SportsVenue
     @Environment(\.dismiss) private var dismiss
+    @StateObject private var translationManager = TranslationManager.shared
     
     var body: some View {
         NavigationView {
@@ -163,7 +164,7 @@ struct VenueDetailView: View {
                                 .fontWeight(.bold)
                                 .multilineTextAlignment(.center)
                             
-                            Text(venue.sport.t)
+                            Text(translationManager.translate(venue.sport))
                                 .font(.title2)
                                 .foregroundColor(.blue)
                                 .fontWeight(.medium)
@@ -174,8 +175,8 @@ struct VenueDetailView: View {
                     
                     // Details
                     VStack(spacing: 16) {
-                        InfoRow(icon: "location.fill", title: "address".t, value: venue.address)
-                        InfoRow(icon: "info.circle.fill", title: "description".t, value: venue.description)
+                        InfoRow(icon: "location.fill", title: translationManager.translate("address"), value: venue.address)
+                        InfoRow(icon: "info.circle.fill", title: translationManager.translate("description"), value: venue.description)
                     }
                     .padding(.horizontal, 20)
                     
@@ -188,7 +189,7 @@ struct VenueDetailView: View {
                             mapItem.name = venue.name
                             mapItem.openInMaps(launchOptions: [MKLaunchOptionsDirectionsModeKey: MKLaunchOptionsDirectionsModeDriving])
                         }) {
-                            Label("get_directions".t, systemImage: "map.fill")
+                            Label(translationManager.translate("get_directions"), systemImage: "map.fill")
                                 .font(.headline)
                                 .foregroundColor(.white)
                                 .frame(maxWidth: .infinity)
@@ -200,7 +201,7 @@ struct VenueDetailView: View {
                         Button(action: {
                             // Placeholder for booking/joining functionality
                         }) {
-                            Label("join_game".t, systemImage: "person.2.fill")
+                            Label(translationManager.translate("join_game"), systemImage: "person.2.fill")
                                 .font(.headline)
                                 .foregroundColor(.blue)
                                 .frame(maxWidth: .infinity)
@@ -213,11 +214,11 @@ struct VenueDetailView: View {
                     .padding(.bottom, 30)
                 }
             }
-            .navigationTitle("venue_details".t)
+            .navigationTitle(translationManager.translate("venue_details"))
             .navigationBarTitleDisplayMode(.inline)
             .toolbar {
                 ToolbarItem(placement: .navigationBarTrailing) {
-                    Button("done".t) {
+                    Button(translationManager.translate("done")) {
                         dismiss()
                     }
                 }

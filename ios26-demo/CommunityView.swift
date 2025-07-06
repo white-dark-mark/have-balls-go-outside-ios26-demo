@@ -14,14 +14,15 @@ struct CommunityView: View {
     let modelContext: ModelContext
     
     @State private var showingRegistration = false
+    @StateObject private var translationManager = TranslationManager.shared
     
     var body: some View {
         NavigationView {
             List {
                 // Users Section
-                Section("registered_users".localized) {
+                Section(translationManager.translate("registered_users")) {
                     if users.isEmpty {
-                        Text("no_users_registered".localized)
+                        Text(translationManager.translate("no_users_registered"))
                             .foregroundColor(.secondary)
                             .italic()
                     } else {
@@ -36,7 +37,7 @@ struct CommunityView: View {
                 }
                 
                 // Items Section
-                Section("sample_items".localized) {
+                Section(translationManager.translate("sample_items")) {
                     ForEach(items) { item in
                         NavigationLink {
                             Text("Item at \(item.timestamp, format: Date.FormatStyle(date: .numeric, time: .standard))")
@@ -47,18 +48,18 @@ struct CommunityView: View {
                     .onDelete(perform: deleteItems)
                 }
             }
-            .navigationTitle("community".localized)
+            .navigationTitle(translationManager.translate("community"))
             .toolbar {
                 ToolbarItem(placement: .navigationBarTrailing) {
                     EditButton()
                 }
                 ToolbarItem {
                     Button(action: addItem) {
-                        Label("add_item".localized, systemImage: "plus")
+                        Label(translationManager.translate("add_item"), systemImage: "plus")
                     }
                 }
                 ToolbarItem(placement: .navigationBarLeading) {
-                    Button("register".localized) {
+                    Button(translationManager.translate("register")) {
                         showingRegistration = true
                     }
                     .foregroundColor(.blue)
@@ -88,6 +89,7 @@ struct CommunityView: View {
 
 struct UserRowView: View {
     let user: User
+    @StateObject private var translationManager = TranslationManager.shared
     
     var body: some View {
         HStack(spacing: 12) {
@@ -116,7 +118,7 @@ struct UserRowView: View {
                 ScrollView(.horizontal, showsIndicators: false) {
                     HStack(spacing: 6) {
                         ForEach(user.sports.prefix(3), id: \.self) { sport in
-                            Text(SportsLocalizer.localizedSportName(sport))
+                            Text(translationManager.translate(sport.lowercased()))
                                 .font(.caption)
                                 .fontWeight(.medium)
                                 .padding(.horizontal, 8)
