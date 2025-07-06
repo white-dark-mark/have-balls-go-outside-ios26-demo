@@ -1,0 +1,74 @@
+/* 
+  Localizable.strings (Serbian)
+  ios26-demo
+*/
+
+// MARK: - Navigation & Titles
+"sports_venues" = "Sportski objekti";
+"venue_details" = "Detalji objekta";
+"register" = "Registruj se";
+"registration" = "Registracija";
+"community" = "Zajednica";
+"map" = "Mapa";
+
+// MARK: - Registration Form
+"phone_number" = "Broj telefona";
+"first_name" = "Ime";
+"last_name" = "Prezime";
+"nickname" = "Nadimak";
+"sports_you_play" = "Sportovi koje igraš";
+"select_sports_hint" = "Izaberi najmanje jedan sport";
+"city_neighborhood" = "Grad/Četvrt";
+"register_button" = "Registruj se";
+"cancel" = "Otkaži";
+"done" = "Završeno";
+
+// MARK: - Validation Messages
+"please_fill_required_fields" = "Molimo vas da popunite sva obavezna polja";
+"select_at_least_one_sport" = "Molimo vas da izaberete najmanje jedan sport";
+"registration_successful" = "Registracija uspešna!";
+"welcome_message" = "Dobrodošli u sportsku zajednicu!";
+
+// MARK: - Sports Names
+"soccer" = "Fudbal";
+"basketball" = "Košarka";
+"tennis" = "Tenis";
+"baseball" = "Bejzbol";
+"american_football" = "Američki fudbal";
+"volleyball" = "Odbojka";
+"swimming" = "Plivanje";
+"running" = "Trčanje";
+"cycling" = "Biciklizam";
+"boxing" = "Boks";
+"martial_arts" = "Borilačke veštine";
+"golf" = "Golf";
+"ice_hockey" = "Hokej na ledu";
+"skiing" = "Skijanje";
+"snowboarding" = "Snoubording";
+"surfing" = "Surfovanje";
+"skateboarding" = "Skejtbording";
+"wrestling" = "Rvanje";
+"weightlifting" = "Dizanje tegova";
+"gym" = "Teretana";
+"gymnastics" = "Gimnastika";
+
+// MARK: - Venue Details
+"address" = "Adresa";
+"description" = "Opis";
+"get_directions" = "Putanja";
+"join_game" = "Pridruži se igri";
+
+// MARK: - Community Section
+"registered_users" = "Registrovani korisnici";
+"no_users_registered" = "Nema registrovanih korisnika";
+"sample_items" = "Primeri stavki";
+"no_items" = "Nema stavki";
+"add_item" = "Dodaj stavku";
+
+// MARK: - Location Messages
+"location_permission_message" = "Ova aplikacija treba pristup vašoj lokaciji da prikaže sportske objekte u blizini i pomogne vam da pronađete igre za učešće.";
+
+// MARK: - User Details
+"contact_info" = "Kontakt informacije";
+"sports_interests" = "Sportska interesovanja";
+"location_info" = "Lokacija"; 

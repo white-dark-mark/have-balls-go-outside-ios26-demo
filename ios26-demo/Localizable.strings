@@ -1,0 +1,74 @@
+/* 
+  Localizable.strings (English)
+  ios26-demo
+*/
+
+// MARK: - Navigation & Titles
+"sports_venues" = "Sports Venues";
+"venue_details" = "Venue Details";
+"register" = "Register";
+"registration" = "Registration";
+"community" = "Community";
+"map" = "Map";
+
+// MARK: - Registration Form
+"phone_number" = "Phone Number";
+"first_name" = "First Name";
+"last_name" = "Last Name";
+"nickname" = "Nickname";
+"sports_you_play" = "Sports You Play";
+"select_sports_hint" = "Select at least one sport";
+"city_neighborhood" = "City/Neighborhood";
+"register_button" = "Register";
+"cancel" = "Cancel";
+"done" = "Done";
+
+// MARK: - Validation Messages
+"please_fill_required_fields" = "Please fill in all required fields";
+"select_at_least_one_sport" = "Please select at least one sport";
+"registration_successful" = "Registration successful!";
+"welcome_message" = "Welcome to the sports community!";
+
+// MARK: - Sports Names
+"soccer" = "Soccer";
+"basketball" = "Basketball";
+"tennis" = "Tennis";
+"baseball" = "Baseball";
+"american_football" = "American Football";
+"volleyball" = "Volleyball";
+"swimming" = "Swimming";
+"running" = "Running";
+"cycling" = "Cycling";
+"boxing" = "Boxing";
+"martial_arts" = "Martial Arts";
+"golf" = "Golf";
+"ice_hockey" = "Ice Hockey";
+"skiing" = "Skiing";
+"snowboarding" = "Snowboarding";
+"surfing" = "Surfing";
+"skateboarding" = "Skateboarding";
+"wrestling" = "Wrestling";
+"weightlifting" = "Weightlifting";
+"gym" = "Gym";
+"gymnastics" = "Gymnastics";
+
+// MARK: - Venue Details
+"address" = "Address";
+"description" = "Description";
+"get_directions" = "Get Directions";
+"join_game" = "Join Game";
+
+// MARK: - Community Section
+"registered_users" = "Registered Users";
+"no_users_registered" = "No users registered yet";
+"sample_items" = "Sample Items";
+"no_items" = "No items";
+"add_item" = "Add Item";
+
+// MARK: - Location Messages
+"location_permission_message" = "This app needs access to your location to show nearby sports venues and help you find games to join.";
+
+// MARK: - User Details
+"contact_info" = "Contact Information";
+"sports_interests" = "Sports Interests";
+"location_info" = "Location"; 

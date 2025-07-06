@@ -1,0 +1,74 @@
+/* 
+  Localizable.strings (Spanish)
+  ios26-demo
+*/
+
+// MARK: - Navigation & Titles
+"sports_venues" = "Instalaciones Deportivas";
+"venue_details" = "Detalles del Local";
+"register" = "Registrarse";
+"registration" = "Registro";
+"community" = "Comunidad";
+"map" = "Mapa";
+
+// MARK: - Registration Form
+"phone_number" = "Número de Teléfono";
+"first_name" = "Nombre";
+"last_name" = "Apellido";
+"nickname" = "Apodo";
+"sports_you_play" = "Deportes que Practicas";
+"select_sports_hint" = "Selecciona al menos un deporte";
+"city_neighborhood" = "Ciudad/Barrio";
+"register_button" = "Registrarse";
+"cancel" = "Cancelar";
+"done" = "Hecho";
+
+// MARK: - Validation Messages
+"please_fill_required_fields" = "Por favor, completa todos los campos requeridos";
+"select_at_least_one_sport" = "Por favor, selecciona al menos un deporte";
+"registration_successful" = "¡Registro exitoso!";
+"welcome_message" = "¡Bienvenido a la comunidad deportiva!";
+
+// MARK: - Sports Names
+"soccer" = "Fútbol";
+"basketball" = "Baloncesto";
+"tennis" = "Tenis";
+"baseball" = "Béisbol";
+"american_football" = "Fútbol Americano";
+"volleyball" = "Voleibol";
+"swimming" = "Natación";
+"running" = "Correr";
+"cycling" = "Ciclismo";
+"boxing" = "Boxeo";
+"martial_arts" = "Artes Marciales";
+"golf" = "Golf";
+"ice_hockey" = "Hockey sobre Hielo";
+"skiing" = "Esquí";
+"snowboarding" = "Snowboard";
+"surfing" = "Surf";
+"skateboarding" = "Skateboard";
+"wrestling" = "Lucha";
+"weightlifting" = "Levantamiento de Pesas";
+"gym" = "Gimnasio";
+"gymnastics" = "Gimnasia";
+
+// MARK: - Venue Details
+"address" = "Dirección";
+"description" = "Descripción";
+"get_directions" = "Obtener Direcciones";
+"join_game" = "Unirse al Juego";
+
+// MARK: - Community Section
+"registered_users" = "Usuarios Registrados";
+"no_users_registered" = "No hay usuarios registrados aún";
+"sample_items" = "Elementos de Muestra";
+"no_items" = "No hay elementos";
+"add_item" = "Agregar Elemento";
+
+// MARK: - Location Messages
+"location_permission_message" = "Esta aplicación necesita acceso a tu ubicación para mostrar instalaciones deportivas cercanas y ayudarte a encontrar juegos para unirse.";
+
+// MARK: - User Details
+"contact_info" = "Información de Contacto";
+"sports_interests" = "Intereses Deportivos";
+"location_info" = "Ubicación"; 
