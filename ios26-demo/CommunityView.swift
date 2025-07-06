@@ -18,14 +18,57 @@ struct CommunityView: View {
     
     var body: some View {
         NavigationView {
-            List {
-                // Users Section
-                Section(translationManager.translate("registered_users")) {
-                    if users.isEmpty {
-                        Text(translationManager.translate("no_users_registered"))
+            if users.isEmpty {
+                // Empty state when no users are registered
+                VStack(spacing: 24) {
+                    Spacer()
+                    
+                    VStack(spacing: 16) {
+                        Image(systemName: "person.3.fill")
+                            .font(.system(size: 64))
                             .foregroundColor(.secondary)
-                            .italic()
-                    } else {
+                        
+                        Text(translationManager.translate("no_users_registered"))
+                            .font(.title2)
+                            .fontWeight(.medium)
+                            .foregroundColor(.secondary)
+                            .multilineTextAlignment(.center)
+                        
+                        Text(translationManager.translate("welcome_message"))
+                            .font(.body)
+                            .foregroundColor(.secondary)
+                            .multilineTextAlignment(.center)
+                            .padding(.horizontal, 32)
+                    }
+                    
+                    Button(action: {
+                        showingRegistration = true
+                    }) {
+                        Text(translationManager.translate("register_button"))
+                            .font(.headline)
+                            .fontWeight(.semibold)
+                            .foregroundColor(.white)
+                            .frame(maxWidth: .infinity)
+                            .frame(height: 50)
+                            .background(
+                                LinearGradient(
+                                    gradient: Gradient(colors: [.blue, .purple]),
+                                    startPoint: .leading,
+                                    endPoint: .trailing
+                                )
+                            )
+                            .cornerRadius(12)
+                    }
+                    .padding(.horizontal, 32)
+                    .padding(.top, 8)
+                    
+                    Spacer()
+                }
+                .navigationTitle(translationManager.translate("community"))
+            } else {
+                // Show users list when users are registered
+                List {
+                    Section(translationManager.translate("registered_users")) {
                         ForEach(users, id: \.phone) { user in
                             NavigationLink {
                                 UserDetailView(user: user)
@@ -35,54 +78,11 @@ struct CommunityView: View {
                         }
                     }
                 }
-                
-                // Items Section
-                Section(translationManager.translate("sample_items")) {
-                    ForEach(items) { item in
-                        NavigationLink {
-                            Text("Item at \(item.timestamp, format: Date.FormatStyle(date: .numeric, time: .standard))")
-                        } label: {
-                            Text(item.timestamp, format: Date.FormatStyle(date: .numeric, time: .standard))
-                        }
-                    }
-                    .onDelete(perform: deleteItems)
-                }
-            }
-            .navigationTitle(translationManager.translate("community"))
-            .toolbar {
-                ToolbarItem(placement: .navigationBarTrailing) {
-                    EditButton()
-                }
-                ToolbarItem {
-                    Button(action: addItem) {
-                        Label(translationManager.translate("add_item"), systemImage: "plus")
-                    }
-                }
-                ToolbarItem(placement: .navigationBarLeading) {
-                    Button(translationManager.translate("register")) {
-                        showingRegistration = true
-                    }
-                    .foregroundColor(.blue)
-                }
+                .navigationTitle(translationManager.translate("community"))
             }
         }
         .sheet(isPresented: $showingRegistration) {
             RegistrationView()
-        }
-    }
-    
-    private func addItem() {
-        withAnimation {
-            let newItem = Item(timestamp: Date())
-            modelContext.insert(newItem)
-        }
-    }
-
-    private func deleteItems(offsets: IndexSet) {
-        withAnimation {
-            for index in offsets {
-                modelContext.delete(items[index])
-            }
         }
     }
 }
