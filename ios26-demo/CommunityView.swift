@@ -10,7 +10,6 @@ import SwiftData
 
 struct CommunityView: View {
     let users: [User]
-    let items: [Item]
     let modelContext: ModelContext
     
     @State private var showingRegistration = false
@@ -158,7 +157,6 @@ struct UserRowView: View {
             User(phone: "+1 555-123-4567", firstName: "John", lastName: "Doe", nickname: "JohnnyD", sports: ["Soccer", "Basketball", "Tennis"], cityNeighborhood: "New York - Manhattan"),
             User(phone: "+1 555-987-6543", firstName: "Jane", lastName: "Smith", nickname: "JaneS", sports: ["Tennis", "Swimming"], cityNeighborhood: "Brooklyn - Williamsburg")
         ],
-        items: [],
-        modelContext: ModelContext(try! ModelContainer(for: User.self, Item.self))
+        modelContext: ModelContext(try! ModelContainer(for: User.self))
     )
 } 

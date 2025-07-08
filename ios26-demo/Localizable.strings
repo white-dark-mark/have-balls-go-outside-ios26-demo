@@ -4,7 +4,6 @@
 */
 
 // MARK: - Navigation & Titles
-"sports_venues" = "Sports Venues";
 "venue_details" = "Venue Details";
 "register" = "Register";
 "registration" = "Registration";
@@ -67,6 +66,9 @@
 
 // MARK: - Location Messages
 "location_permission_message" = "This app needs access to your location to show nearby sports venues and help you find games to join.";
+"venue" = "venue";
+"venues" = "venues";
+"venues_found" = "venues found";
 
 // MARK: - User Details
 "contact_info" = "Contact Information";

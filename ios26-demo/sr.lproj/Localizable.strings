@@ -4,7 +4,6 @@
 */
 
 // MARK: - Navigation & Titles
-"sports_venues" = "Sportski objekti";
 "venue_details" = "Detalji objekta";
 "register" = "Registruj se";
 "registration" = "Registracija";
@@ -67,6 +66,9 @@
 
 // MARK: - Location Messages
 "location_permission_message" = "Ova aplikacija treba pristup vašoj lokaciji da prikaže sportske objekte u blizini i pomogne vam da pronađete igre za učešće.";
+"venue" = "objekat";
+"venues" = "objekti";
+"venues_found" = "objekti pronađeni";
 
 // MARK: - User Details
 "contact_info" = "Kontakt informacije";

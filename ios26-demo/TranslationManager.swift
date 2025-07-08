@@ -114,7 +114,6 @@ class TranslationManager: ObservableObject {
     private func loadHardcodedTranslations() {
         translations = [
             "en": [
-                "sports_venues": "Sports Venues",
                 "registration": "Registration",
                 "community": "Community",
                 "map": "Map",
@@ -169,7 +168,6 @@ class TranslationManager: ObservableObject {
                 "language": "Language"
             ],
             "sr": [
-                "sports_venues": "Sportski objekti",
                 "registration": "Registracija",
                 "community": "Zajednica",
                 "map": "Mapa",
@@ -224,7 +222,6 @@ class TranslationManager: ObservableObject {
                 "language": "Jezik"
             ],
             "es": [
-                "sports_venues": "Instalaciones Deportivas",
                 "registration": "Registro",
                 "community": "Comunidad",
                 "map": "Mapa",

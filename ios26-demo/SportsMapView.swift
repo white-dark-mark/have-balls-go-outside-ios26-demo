@@ -8,16 +8,33 @@
 import SwiftUI
 import MapKit
 import CoreLocation
+import Combine
+
+// MARK: - MKCoordinateRegion Extension
+extension MKCoordinateRegion: Equatable {
+    public static func == (lhs: MKCoordinateRegion, rhs: MKCoordinateRegion) -> Bool {
+        return abs(lhs.center.latitude - rhs.center.latitude) < 0.0001 &&
+               abs(lhs.center.longitude - rhs.center.longitude) < 0.0001 &&
+               abs(lhs.span.latitudeDelta - rhs.span.latitudeDelta) < 0.0001 &&
+               abs(lhs.span.longitudeDelta - rhs.span.longitudeDelta) < 0.0001
+    }
+}
 
 struct SportsMapView: View {
     @StateObject private var locationManager = LocationManager()
+    @StateObject private var venueSearchManager = VenueSearchManager()
     @StateObject private var translationManager = TranslationManager.shared
     @State private var selectedVenue: SportsVenue?
     @State private var showingVenueDetail = false
     @State private var showingRegistration = false
     @State private var showingLanguagePicker = false
+    @State private var hasPerformedInitialSearch = false
+    @State private var lastSearchLocation: CLLocation?
+    @State private var searchDebounceTimer: Timer?
     
-    private let venues = SportsVenue.sampleVenues
+    private var venues: [SportsVenue] {
+        venueSearchManager.venues.isEmpty ? SportsVenue.fallbackVenues : venueSearchManager.venues
+    }
     
     var body: some View {
         NavigationView {
@@ -31,6 +48,8 @@ struct SportsMapView: View {
                     }
                 }
                 .ignoresSafeArea()
+
+
                 
                 // Floating action buttons
                 VStack {
@@ -58,7 +77,6 @@ struct SportsMapView: View {
                                     .clipShape(Circle())
                                     .shadow(radius: 4)
                             }
-                            
                             // Language picker button
                             Button(action: {
                                 showingLanguagePicker = true
@@ -90,8 +108,45 @@ struct SportsMapView: View {
                         .padding(.bottom, 100)
                     }
                 }
+                
+                // Bottom status bar
+                VStack {
+                    HStack {
+                        VStack(alignment: .leading, spacing: 2) {
+                            Text(venueSearchManager.searchLocationName.isEmpty ? "Loading..." : venueSearchManager.searchLocationName)
+                                .font(.subheadline)
+                                .fontWeight(.medium)
+                                .foregroundColor(.primary)
+                            
+                            let venueCount = venueSearchManager.venues.count
+                            let venueText = venueCount == 1 ? translationManager.translate("venue") : translationManager.translate("venues")
+                            Text("\(venueCount) \(venueText) found")
+                                .font(.caption)
+                                .foregroundColor(.secondary)
+                        }
+                        
+                        Spacer()
+                        
+                        if false {
+                            ProgressView()
+                                .scaleEffect(0.8)
+                                .progressViewStyle(CircularProgressViewStyle(tint: .blue))
+                        }
+                    }
+                    .padding(.horizontal, 16)
+                    .padding(.vertical, 12)
+                    .background(
+                        RoundedRectangle(cornerRadius: 12)
+                            .fill(Color(.systemBackground))
+                            .shadow(radius: 4)
+                    )
+                    .padding(.horizontal, 16)
+                    .padding(.bottom, 100)
+                    
+                    Spacer()
+                }
+                .allowsHitTesting(false)
             }
-            .navigationTitle(translationManager.translate("sports_venues"))
             .navigationBarTitleDisplayMode(.inline)
             .sheet(isPresented: $showingVenueDetail) {
                 if let venue = selectedVenue {
@@ -107,6 +162,64 @@ struct SportsMapView: View {
             .onAppear {
                 // Location is automatically initialized in LocationManager
                 print("📍 Sports map view appeared")
+                
+                // Perform initial search after a short delay to let location initialize
+                DispatchQueue.main.asyncAfter(deadline: .now() + 1.0) {
+                    if !hasPerformedInitialSearch {
+                        searchForVenues()
+                        hasPerformedInitialSearch = true
+                    }
+                }
+            }
+            .onChange(of: locationManager.location) { newLocation in
+                // Search for venues when location changes (but only after initial search)
+                if hasPerformedInitialSearch, let _ = newLocation {
+                    print("📍 Location changed, searching for venues in current viewport")
+                    venueSearchManager.searchVenuesInRegion(region: locationManager.region)
+                }
+            }
+            .onChange(of: locationManager.region) { newRegion in
+                // Search for venues when map region changes (user pans/zooms the map)
+                if hasPerformedInitialSearch {
+                    searchVenuesForMapRegion(region: newRegion)
+                }
+            }
+            .onDisappear {
+                // Clean up timer when view disappears
+                searchDebounceTimer?.invalidate()
+                searchDebounceTimer = nil
+            }
+        }
+    }
+    
+    // MARK: - Helper Methods
+    
+    private func searchForVenues() {
+        print("🔍 Searching for venues in current map viewport")
+        venueSearchManager.searchVenuesInRegion(region: locationManager.region)
+        lastSearchLocation = CLLocation(latitude: locationManager.region.center.latitude, longitude: locationManager.region.center.longitude)
+    }
+    
+    private func searchVenuesForMapRegion(region: MKCoordinateRegion) {
+        let mapCenter = CLLocation(latitude: region.center.latitude, longitude: region.center.longitude)
+        
+        // Check if we've moved far enough to warrant a new search (1km threshold)
+        if let lastLocation = lastSearchLocation {
+            let distance = mapCenter.distance(from: lastLocation)
+            if distance < 1000 { // Less than 1km, don't search again
+                return
+            }
+        }
+        
+        // Cancel any existing timer
+        searchDebounceTimer?.invalidate()
+        
+        // Start a new timer to debounce the search (wait 1 second after user stops moving)
+        searchDebounceTimer = Timer.scheduledTimer(withTimeInterval: 1.0, repeats: false) { _ in
+            DispatchQueue.main.async {
+                print("🗺️ Searching for venues in map viewport: \(region.center) with span: \(region.span)")
+                self.venueSearchManager.searchVenuesInRegion(region: region)
+                self.lastSearchLocation = mapCenter
             }
         }
     }

@@ -1,6 +1,5 @@
 {
   "en": {
-    "sports_venues": "Sports Venues",
     "venue_details": "Venue Details",
     "register": "Register",
     "registration": "Registration",
@@ -58,7 +57,6 @@
     "language": "Language"
   },
   "sr": {
-    "sports_venues": "Sportski objekti",
     "venue_details": "Detalji objekta",
     "register": "Registruj se",
     "registration": "Registracija",
@@ -116,7 +114,6 @@
     "language": "Jezik"
   },
   "es": {
-    "sports_venues": "Instalaciones Deportivas",
     "venue_details": "Detalles del Local",
     "register": "Registrarse",
     "registration": "Registro",

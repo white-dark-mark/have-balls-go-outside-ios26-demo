@@ -10,7 +10,6 @@ import SwiftData
 
 struct ContentView: View {
     @Environment(\.modelContext) private var modelContext
-    @Query private var items: [Item]
     @Query private var users: [User]
     @StateObject private var translationManager = TranslationManager.shared
 
@@ -21,30 +20,15 @@ struct ContentView: View {
                     Label(translationManager.translate("map"), systemImage: "map.fill")
                 }
             
-            CommunityView(users: users, items: items, modelContext: modelContext)
+            CommunityView(users: users, modelContext: modelContext)
                 .tabItem {
                     Label(translationManager.translate("community"), systemImage: "person.3.fill")
                 }
-        }
-    }
-
-    private func addItem() {
-        withAnimation {
-            let newItem = Item(timestamp: Date())
-            modelContext.insert(newItem)
-        }
-    }
-
-    private func deleteItems(offsets: IndexSet) {
-        withAnimation {
-            for index in offsets {
-                modelContext.delete(items[index])
-            }
         }
     }
 }
 
 #Preview {
     ContentView()
-        .modelContainer(for: Item.self, inMemory: true)
+        .modelContainer(for: User.self, inMemory: true)
 }

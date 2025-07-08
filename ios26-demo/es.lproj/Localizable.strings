@@ -4,7 +4,6 @@
 */
 
 // MARK: - Navigation & Titles
-"sports_venues" = "Instalaciones Deportivas";
 "venue_details" = "Detalles del Local";
 "register" = "Registrarse";
 "registration" = "Registro";
@@ -67,6 +66,9 @@
 
 // MARK: - Location Messages
 "location_permission_message" = "Esta aplicación necesita acceso a tu ubicación para mostrar instalaciones deportivas cercanas y ayudarte a encontrar juegos para unirse.";
+"venue" = "instalación";
+"venues" = "instalaciones";
+"venues_found" = "instalaciones encontradas";
 
 // MARK: - User Details
 "contact_info" = "Información de Contacto";
