@@ -73,4 +73,30 @@
 // MARK: - User Details
 "contact_info" = "Contact Information";
 "sports_interests" = "Sports Interests";
-"location_info" = "Location"; 
+"location_info" = "Location";
+
+// MARK: - Email Signup
+"email_signup" = "Email Sign-up";
+"email" = "Email";
+"password" = "Password";
+"confirm_password" = "Confirm Password";
+"invalid_email" = "Invalid email address";
+"password_min_length" = "Password must be at least 6 characters";
+"passwords_do_not_match" = "Passwords do not match";
+"registration_failed" = "Registration failed. Please try again.";
+
+// MARK: - OTP Verification
+"otp_verification" = "Phone Verification";
+"otp_sent_message" = "We've sent a verification code to your phone number";
+"verification_code" = "Verification Code";
+"enter_otp_code" = "Enter 6-digit code";
+"verify_code" = "Verify Code";
+"verifying" = "Verifying...";
+"didnt_receive_code" = "Didn't receive the code?";
+"resend_code" = "Resend Code";
+"resending" = "Resending...";
+"verification" = "Verification";
+"verification_successful" = "Phone number verified successfully!";
+"verification_failed" = "Verification failed. Please check your code.";
+"otp_resent" = "Verification code sent again";
+"otp_resend_failed" = "Failed to resend code. Please try again."; 

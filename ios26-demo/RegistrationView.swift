@@ -7,6 +7,9 @@
 
 import SwiftUI
 import SwiftData
+import Supabase
+import Auth
+import Foundation
 
 struct RegistrationView: View {
     @Environment(\.modelContext) private var modelContext
@@ -19,8 +22,16 @@ struct RegistrationView: View {
     @State private var selectedSports: Set<String> = []
     @State private var cityNeighborhood = ""
     
+    @State private var enableEmailSignup = false
+    @State private var email = ""
+    @State private var password = ""
+    @State private var confirmPassword = ""
+    
     @State private var showingAlert = false
     @State private var alertMessage = ""
+    @State private var showingOTPVerification = false
+    @State private var registeredUserEmail = ""
+    @State private var pendingUserData: User?
     
     @StateObject private var translationManager = TranslationManager.shared
     
@@ -102,6 +113,47 @@ struct RegistrationView: View {
                         
                         Divider()
                         
+                        // Email Sign-up Section
+                        VStack(alignment: .leading, spacing: 16) {
+                            HStack {
+                                Text(translationManager.translate("email_signup"))
+                                    .font(.headline)
+                                    .fontWeight(.semibold)
+                                
+                                Spacer()
+                                
+                                Toggle("", isOn: $enableEmailSignup)
+                                    .toggleStyle(SwitchToggleStyle(tint: .blue))
+                            }
+                            
+                            if enableEmailSignup {
+                                VStack(spacing: 16) {
+                                    CustomTextField(
+                                        title: translationManager.translate("email"),
+                                        text: $email,
+                                        placeholder: "marko@example.com",
+                                        keyboardType: .emailAddress
+                                    )
+                                    
+                                    CustomSecureField(
+                                        title: translationManager.translate("password"),
+                                        text: $password,
+                                        placeholder: "Enter password"
+                                    )
+                                    
+                                    CustomSecureField(
+                                        title: translationManager.translate("confirm_password"),
+                                        text: $confirmPassword,
+                                        placeholder: "Confirm password"
+                                    )
+                                }
+                                .transition(.opacity.combined(with: .move(edge: .top)))
+                                .animation(.easeInOut(duration: 0.3), value: enableEmailSignup)
+                            }
+                        }
+                        
+                        Divider()
+                        
                         // Sports Selection Section
                         VStack(alignment: .leading, spacing: 16) {
                             VStack(alignment: .leading, spacing: 4) {
@@ -163,6 +215,8 @@ struct RegistrationView: View {
                                 .cornerRadius(12)
                         }
                         .padding(.top, 20)
+                        
+
                     }
                     .padding(.horizontal, 24)
                     .padding(.bottom, 30)
@@ -182,6 +236,18 @@ struct RegistrationView: View {
             Button(translationManager.translate("done")) { }
         } message: {
             Text(alertMessage)
+        }
+        .sheet(isPresented: $showingOTPVerification) {
+            if let userData = pendingUserData {
+                OTPVerificationView(
+                    phoneNumber: phone, 
+                    userEmail: registeredUserEmail, 
+                    pendingUserData: userData
+                ) {
+                    // Callback when OTP verification is successful
+                    dismiss()
+                }
+            }
         }
     }
     
@@ -217,23 +283,88 @@ struct RegistrationView: View {
             return
         }
         
-        // Create user
-        let newUser = User(
-            phone: phone,
-            firstName: firstName,
-            lastName: lastName,
-            nickname: nickname,
-            sports: Array(selectedSports),
-            cityNeighborhood: cityNeighborhood
-        )
+        // Email signup validation
+        if enableEmailSignup {
+            guard !email.isEmpty else {
+                showAlert(message: translationManager.translate("please_fill_required_fields"))
+                return
+            }
+            
+            guard email.contains("@") && email.contains(".") else {
+                showAlert(message: translationManager.translate("invalid_email"))
+                return
+            }
+            
+            guard !password.isEmpty else {
+                showAlert(message: translationManager.translate("please_fill_required_fields"))
+                return
+            }
+            
+            guard password.count >= 6 else {
+                showAlert(message: translationManager.translate("password_min_length"))
+                return
+            }
+            
+            guard password == confirmPassword else {
+                showAlert(message: translationManager.translate("passwords_do_not_match"))
+                return
+            }
+        }
         
-        modelContext.insert(newUser)
-        
-        showAlert(message: translationManager.translate("registration_successful"))
-        
-        // Reset form
-        DispatchQueue.main.asyncAfter(deadline: .now() + 1.5) {
-            dismiss()
+        // Start registration flow
+        Task {
+            do {
+                let client = SupabaseClientManager.shared.client
+                
+                if enableEmailSignup {
+                    // Email + Password signup
+                    print("🔐 Starting email signup with email: \(email)")
+                    let response = try await client.auth.signUp(
+                        email: email,
+                        password: password
+                    )
+                    print("✅ Supabase user created with email: \(response.user.email ?? "unknown")")
+                    registeredUserEmail = response.user.email ?? ""
+                    
+                    // Call edge function to create user record
+                    await createUserRecord(authSession: response.session)
+                } else {
+                    // Phone-only signup with OTP
+                    print("📱 Starting phone-only signup with phone: \(phone)")
+                    try await client.auth.signInWithOTP(phone: phone)
+                    print("✅ OTP sent successfully to phone: \(phone)")
+                    
+                    // Prepare user data for OTP verification
+                    pendingUserData = User(
+                        phone: phone,
+                        firstName: firstName,
+                        lastName: lastName,
+                        nickname: nickname,
+                        sports: Array(selectedSports),
+                        cityNeighborhood: cityNeighborhood
+                    )
+                    
+                    // Show OTP verification view
+                    showingOTPVerification = true
+                }
+                
+            } catch let error as NSError {
+                print("❌ Registration failed:")
+                print("Error domain: \(error.domain)")
+                print("Error code: \(error.code)")
+                print("Error description: \(error.localizedDescription)")
+                print("Error userInfo: \(error.userInfo)")
+                
+                // Show more specific error message
+                var errorMessage = translationManager.translate("registration_failed")
+                if error.localizedDescription.contains("email") {
+                    errorMessage = translationManager.translate("invalid_email")
+                } else if error.localizedDescription.contains("phone") || error.localizedDescription.contains("SMS") {
+                    errorMessage = "Phone number format may be invalid. Please use international format (e.g., +381601234567)"
+                }
+                
+                showAlert(message: errorMessage)
+            }
         }
     }
     
@@ -241,6 +372,81 @@ struct RegistrationView: View {
         alertMessage = message
         showingAlert = true
     }
+    
+    // MARK: - Edge Function Integration
+    private func createUserRecord(authSession: Session?) async {
+        guard let session = authSession else {
+            print("❌ No auth session available")
+            showAlert(message: translationManager.translate("registration_failed"))
+            return
+        }
+        
+        do {
+            let client = SupabaseClientManager.shared.client
+            let supabaseManager = SupabaseClientManager.shared
+            let url = URL(string: "\(supabaseManager.supabaseURL)/functions/v1/register-user")!
+            
+            var request = URLRequest(url: url)
+            request.httpMethod = "POST"
+            request.setValue("Bearer \(session.accessToken)", forHTTPHeaderField: "Authorization")
+            request.setValue("application/json", forHTTPHeaderField: "Content-Type")
+            
+            let userData = [
+                "phone": phone,
+                "firstName": firstName,
+                "lastName": lastName,
+                "nickname": nickname,
+                "sports": Array(selectedSports),
+                "cityNeighborhood": cityNeighborhood,
+                "email": enableEmailSignup ? email : nil
+            ] as [String: Any]
+            
+            let requestBody = ["userData": userData]
+            request.httpBody = try JSONSerialization.data(withJSONObject: requestBody)
+            
+            print("🚀 Calling edge function to create user record...")
+            
+            let (data, response) = try await URLSession.shared.data(for: request)
+            
+            if let httpResponse = response as? HTTPURLResponse {
+                print("📊 Edge function response status: \(httpResponse.statusCode)")
+                
+                if httpResponse.statusCode == 201 {
+                    // Success
+                    let responseData = try JSONSerialization.jsonObject(with: data) as? [String: Any]
+                    print("✅ User record created successfully: \(responseData?["message"] ?? "No message")")
+                    
+                    // Create local user model
+                    let newUser = User(
+                        phone: phone,
+                        firstName: firstName,
+                        lastName: lastName,
+                        nickname: nickname,
+                        sports: Array(selectedSports),
+                        cityNeighborhood: cityNeighborhood
+                    )
+                    
+                    modelContext.insert(newUser)
+                    
+                    showAlert(message: translationManager.translate("registration_successful"))
+                    
+                    DispatchQueue.main.asyncAfter(deadline: .now() + 1.5) {
+                        dismiss()
+                    }
+                } else {
+                    // Error response
+                    let errorData = try JSONSerialization.jsonObject(with: data) as? [String: Any]
+                    let errorMessage = errorData?["error"] as? String ?? "Unknown error"
+                    print("❌ Edge function error: \(errorMessage)")
+                    showAlert(message: translationManager.translate("registration_failed"))
+                }
+            }
+        } catch {
+            print("❌ Failed to call edge function: \(error.localizedDescription)")
+            showAlert(message: translationManager.translate("registration_failed"))
+        }
+    }
+
 }
 
 struct SportItem {
@@ -264,6 +470,34 @@ struct CustomTextField: View {
             TextField(placeholder, text: $text)
                 .textFieldStyle(PlainTextFieldStyle())
                 .keyboardType(keyboardType)
+                .padding(.horizontal, 16)
+                .padding(.vertical, 12)
+                .background(
+                    RoundedRectangle(cornerRadius: 10)
+                        .fill(Color(.systemGray6))
+                )
+                .overlay(
+                    RoundedRectangle(cornerRadius: 10)
+                        .stroke(Color(.systemGray4), lineWidth: 1)
+                )
+        }
+    }
+}
+
+struct CustomSecureField: View {
+    let title: String
+    @Binding var text: String
+    let placeholder: String
+    
+    var body: some View {
+        VStack(alignment: .leading, spacing: 8) {
+            Text(title)
+                .font(.subheadline)
+                .fontWeight(.medium)
+                .foregroundColor(.primary)
+            
+            SecureField(placeholder, text: $text)
+                .textFieldStyle(PlainTextFieldStyle())
                 .padding(.horizontal, 16)
                 .padding(.vertical, 12)
                 .background(

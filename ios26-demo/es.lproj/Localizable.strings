@@ -73,4 +73,30 @@
 // MARK: - User Details
 "contact_info" = "Información de Contacto";
 "sports_interests" = "Intereses Deportivos";
-"location_info" = "Ubicación"; 
+"location_info" = "Ubicación";
+
+// MARK: - Email Signup
+"email_signup" = "Registro con Email";
+"email" = "Email";
+"password" = "Contraseña";
+"confirm_password" = "Confirmar Contraseña";
+"invalid_email" = "Dirección de email inválida";
+"password_min_length" = "La contraseña debe tener al menos 6 caracteres";
+"passwords_do_not_match" = "Las contraseñas no coinciden";
+"registration_failed" = "El registro falló. Por favor, intenta de nuevo.";
+
+// MARK: - OTP Verification
+"otp_verification" = "Verificación de Teléfono";
+"otp_sent_message" = "Hemos enviado un código de verificación a tu número de teléfono";
+"verification_code" = "Código de Verificación";
+"enter_otp_code" = "Ingresa el código de 6 dígitos";
+"verify_code" = "Verificar Código";
+"verifying" = "Verificando...";
+"didnt_receive_code" = "¿No recibiste el código?";
+"resend_code" = "Reenviar Código";
+"resending" = "Reenviando...";
+"verification" = "Verificación";
+"verification_successful" = "¡Número de teléfono verificado exitosamente!";
+"verification_failed" = "La verificación falló. Por favor, revisa tu código.";
+"otp_resent" = "Código de verificación enviado nuevamente";
+"otp_resend_failed" = "No se pudo reenviar el código. Por favor, intenta de nuevo."; 

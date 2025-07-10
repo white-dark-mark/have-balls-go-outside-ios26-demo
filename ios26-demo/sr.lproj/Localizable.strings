@@ -73,4 +73,30 @@
 // MARK: - User Details
 "contact_info" = "Kontakt informacije";
 "sports_interests" = "Sportska interesovanja";
-"location_info" = "Lokacija"; 
+"location_info" = "Lokacija";
+
+// MARK: - Email Signup
+"email_signup" = "Registracija sa emailom";
+"email" = "Email";
+"password" = "Lozinka";
+"confirm_password" = "Potvrdi lozinku";
+"invalid_email" = "Neispravna email adresa";
+"password_min_length" = "Lozinka mora imati najmanje 6 karaktera";
+"passwords_do_not_match" = "Lozinke se ne poklapaju";
+"registration_failed" = "Registracija nije uspešna. Molimo pokušajte ponovo.";
+
+// MARK: - OTP Verification
+"otp_verification" = "Verifikacija telefona";
+"otp_sent_message" = "Poslali smo verifikacioni kod na vaš broj telefona";
+"verification_code" = "Verifikacioni kod";
+"enter_otp_code" = "Unesite 6-cifreni kod";
+"verify_code" = "Verifikuj kod";
+"verifying" = "Verifikujem...";
+"didnt_receive_code" = "Niste dobili kod?";
+"resend_code" = "Pošaljite ponovo";
+"resending" = "Šaljem ponovo...";
+"verification" = "Verifikacija";
+"verification_successful" = "Broj telefona je uspešno verifikovan!";
+"verification_failed" = "Verifikacija nije uspešna. Molimo proverite kod.";
+"otp_resent" = "Verifikacioni kod je poslat ponovo";
+"otp_resend_failed" = "Slanje koda nije uspešno. Molimo pokušajte ponovo."; 
